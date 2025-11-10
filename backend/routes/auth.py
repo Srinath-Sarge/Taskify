@@ -13,6 +13,10 @@ SECRET_KEY="1234"
 ALGORITHM="HS256"
 exp_time=30
 
+@router.get("/")
+def check():
+    return {"message":"Your inside Authentication Route"}
+
 @router.post("/signup")
 def signup(username: str, password: str, db: Session=Depends(get_db)):
     if db.query(User).filter(User.username==username).first():
