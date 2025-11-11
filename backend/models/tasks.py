@@ -24,5 +24,7 @@ class Task(Base):
     priority= Column(Enum(PriorityEnum), default=PriorityEnum.medium)
     due_date= Column(Date, nullable=False)
     assigner_id= Column(Integer, ForeignKey("users.id"), nullable=True)
+    assignee_id= Column(Integer, ForeignKey("users.id"), nullable=True)
 
-    assigner=relationship("user.User")
+    assigner=relationship("User", foreign_keys=[assigner_id], back_populates="assigned_tasks")
+    assignee=relationship("User", foreign_keys=[assignee_id], back_populates="tasks_assigned_to")
