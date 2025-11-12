@@ -8,6 +8,7 @@ class StatusEnum(enum.Enum):
     in_progress = "in_progress"
     completed = "completed"
     cancelled = "cancelled"
+    overdue= "overdue"
 
 class PriorityEnum(enum.Enum):
     low="low"
