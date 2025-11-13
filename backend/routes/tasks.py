@@ -13,16 +13,20 @@ def create_task(title: str,
                  description: str, 
                  due_date: date, 
                  priority: PriorityEnum= PriorityEnum.medium,
-                 assignee_id: int = None, 
+                 assignee_id: int | None=None,
+                 dependency_id: int | None=None, 
                  db: Session=Depends(get_db),
                  c_user: Session=Depends(get_current_user)):
-    assignee=db.query(User).filter(User.id==assignee_id).first()
-    if not assignee:
-        raise HTTPException(status_code=404, detail="Assignee ID can't be Found.")
-    elif assignee and assignee.id==c_user.id:
+    if assignee_id:
+        assignee=db.query(User).filter(User.id==assignee_id).first()
+        if not assignee:
+            raise HTTPException(status_code=404, detail="Assignee ID can't be Found.")
+        elif assignee and assignee.id==c_user.id:
+            assignee=c_user
+        elif assignee and assignee.id!=c_user.id and not c_user.is_admin:
+            raise HTTPException(status_code=403, detail="Only admins can asign task to others")
+    else:
         assignee=c_user
-    elif assignee and assignee.id!=c_user.id and not c_user.is_admin:
-        raise HTTPException(status_code=403, detail="Only admins can asign task to others")
     
     
     new_task= Task(title=title,
@@ -30,7 +34,8 @@ def create_task(title: str,
                    priority=priority,
                    due_date=due_date,
                    assigner_id=c_user.id,
-                   assignee_id=assignee.id)
+                   assignee_id=assignee.id,
+                   dependency_id=dependency_id)
     db.add(new_task)
     db.commit()
     db.refresh(new_task)
@@ -45,7 +50,7 @@ def get_tasks(status: StatusEnum= None,
     if c_user.is_admin:
         query=db.query(Task).filter(Task.assigner_id==c_user.id)
     else:
-        query=db.query(Task).filter(Task.assignee_id==c_user.id)
+        query=db.query(Task).filter(Task.assignee_id==c_user.id,Task.assigner_id==c_user.id)
     
     if status:
         query=query.filter(Task.status==status)
@@ -65,7 +70,17 @@ def update_task(task_id: int,
     
     if task.assigner_id!=c_user.id and task.assignee_id!=c_user.id and not c_user.is_admin:
         raise HTTPException(status_code=403,detail="Not Authorized to update this Task...")
+    if task.dependency_id:
+            dep_task=db.query(Task).filter(Task.id==task.dependency_id).first()
+            if dep_task and dep_task.status==StatusEnum.cancelled:
+                task.status=StatusEnum.cancelled
+                db.commit()
+                db.refresh(task)
+                raise HTTPException(status_code=400, detail=f"Its dependency task is cancelled... so cancelling this task.")
+
     if status:
+        if dep_task and dep_task.status!=StatusEnum.completed:
+                raise HTTPException(status_code=400, detail=f"Cannot modify this task before completing its dependency task... Task id:{dep_task.id},Task Name:{dep_task.title}")
         task.status=status
     if priority:
         task.priority=priority
@@ -80,6 +95,13 @@ def delete_task(task_id: int, db: Session= Depends(get_db), c_user: Session=Depe
     task=db.query(Task).filter(Task.id==task_id).first()
     if not task:
         raise HTTPException(status_code=404,details="Task not Found!!!")
+    
+
+    dep_tasks=(db.query(Task).filter(Task.dependency_id==task.id).all())
+    if dep_tasks:
+        for dt in dep_tasks:
+            delete_task(dt.id)
+
     tid,tname=task.id,task.title
     db.delete(task)
     db.commit()

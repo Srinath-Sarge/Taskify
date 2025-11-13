@@ -26,6 +26,8 @@ class Task(Base):
     due_date= Column(Date, nullable=False)
     assigner_id= Column(Integer, ForeignKey("users.id"), nullable=True)
     assignee_id= Column(Integer, ForeignKey("users.id"), nullable=True)
-
+    dependency_id = Column(Integer, ForeignKey("tasks.id"), nullable=True)
+    
+    dependency = relationship("Task", remote_side=[id])
     assigner=relationship("User", foreign_keys=[assigner_id], back_populates="assigned_tasks")
     assignee=relationship("User", foreign_keys=[assignee_id], back_populates="tasks_assigned_to")
