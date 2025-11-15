@@ -3,6 +3,7 @@ from database import Base, engine
 from models import user
 from routes import auth,tasks
 from schedules.overdue import start_scheduler
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
@@ -10,6 +11,13 @@ app = FastAPI(title="Taskify - Task Management System")
 Base.metadata.create_all(bind=engine)
 app.include_router(auth.router)
 app.include_router(tasks.router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 start_scheduler()
 
 @app.get("/")

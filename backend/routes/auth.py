@@ -5,7 +5,11 @@ from models.user import User
 from passlib.context import CryptContext
 from jose import jwt
 from datetime import datetime, timedelta
+from pydantic import BaseModel
 
+class LoginModel(BaseModel):
+    username: str
+    password: str
 
 router= APIRouter(prefix="/auth",tags=["Authentication"])
 pwd_context=CryptContext(schemes=["bcrypt"],deprecated="auto")
@@ -27,14 +31,14 @@ def signup(username: str, password: str, db: Session=Depends(get_db)):
     return {"message": "User created successfully"}
 
 @router.post("/login")
-def login(username: str, password: str, db: Session=Depends(get_db)):
-    user=db.query(User).filter(User.username==username).first()
+def login(data: LoginModel, db: Session=Depends(get_db)):
+    user=db.query(User).filter(User.username==data.username).first()
     if not user:
         raise HTTPException(status_code=400, detail="User doesn't exist")
-    elif not pwd_context.verify(password, user.password):
+    elif not pwd_context.verify(data.password, user.password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password")
     
-    token=create_tokens({"sub": username}, timedelta(minutes=exp_time))
+    token=create_tokens({"sub": data.username, "is_admin": user.is_admin}, timedelta(minutes=exp_time))
     return {"access_token": token, "token_type": "bearer"}
 
 
