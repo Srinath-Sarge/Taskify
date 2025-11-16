@@ -1,3 +1,5 @@
+import { handleLogout } from "../utils/logout";
+
 export default function Sidebar() {
   return (
     <div className="w-56 h-screen bg-white border-r border-gray-200 fixed left-0 top-0">
@@ -42,7 +44,7 @@ export default function Sidebar() {
 
       {/* Footer */}
       <div className="absolute bottom-5 w-full px-5">
-        <button className="text-red-500 hover:text-red-600 text-sm">
+        <button onClick={handleLogout} className="text-red-500 hover:text-red-600 text-sm">
           Logout
         </button>
       </div>

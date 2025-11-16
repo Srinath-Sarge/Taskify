@@ -1,41 +1,55 @@
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Navbar from "./components/Navbar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
-import AdminRoute from "./components/AdminRoute";
 import AdminDashboard from "./pages/AdminDashboard";
+import Signup from "./pages/Signup";
+
+import ProtectedRoute from "./routes/ProtectedRoute";
+import AdminRoute from "./routes/AdminRoute";
+
+import { AdminLayout, UserLayout } from "./components/Layout";
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Public Route */}
-        <Route path="/" element={<Login />} />
+          <Route path="/" element={<Login />} />
 
-        {/* Protected User Route */}
+
+        {/* LOGIN & SIGNUP PAGE */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* USER DASHBOARD */}
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <UserLayout>
+                <Dashboard />
+              </UserLayout>
             </ProtectedRoute>
           }
         />
 
-        {/* Admin Route */}
+        {/* ADMIN DASHBOARD */}
         <Route
           path="/admin"
           element={
             <ProtectedRoute>
-            <AdminRoute>
-              <AdminDashboard />
-            </AdminRoute>
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminDashboard />
+                </AdminLayout>
+              </AdminRoute>
             </ProtectedRoute>
           }
         />
+
       </Routes>
     </Router>
   );
 }
+
 export default App;

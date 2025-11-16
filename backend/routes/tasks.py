@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from database import get_db
 from models.tasks import Task, StatusEnum, PriorityEnum
@@ -42,20 +43,33 @@ def create_task(title: str,
     return {"message":"Task Created Succesfully","task":new_task.id, "task":new_task.title,"task assigned_to":assignee.id}
 
 @router.get("/")
-def get_tasks(status: StatusEnum= None, 
-              priority: PriorityEnum = None, 
-              db: Session= Depends(get_db),
-              c_user: Session=Depends(get_current_user)):
-    
+def get_tasks(
+    status: Optional[str] = Query(None),
+    priority: Optional[str] = Query(None),
+    db: Session = Depends(get_db),
+    c_user: Session = Depends(get_current_user)
+):
+
+    query = db.query(Task)
     if c_user.is_admin:
-        query=db.query(Task).filter(Task.assigner_id==c_user.id)
+        query = query.filter(Task.assigner_id == c_user.id)
     else:
-        query=db.query(Task).filter(Task.assignee_id==c_user.id,Task.assigner_id==c_user.id)
-    
+        query = query.filter(Task.assignee_id == c_user.id)
+
     if status:
-        query=query.filter(Task.status==status)
+        try:
+            status_enum = StatusEnum(status)
+            query = query.filter(Task.status == status_enum)
+        except:
+            pass  
+
     if priority:
-        query=query.filter(Task.priority==priority)
+        try:
+            priority_enum = PriorityEnum(priority)
+            query = query.filter(Task.priority == priority_enum)
+        except:
+            pass
+
     return query.all()
 
 @router.put("/{task_id}")
@@ -66,7 +80,7 @@ def update_task(task_id: int,
                 c_user: Session=Depends(get_current_user)):
     task=db.query(Task).filter(Task.id==task_id).first()
     if not task:
-        raise HTTPException(status_code=404,details="Task not Found!!!")
+        raise HTTPException(status_code=404,detail="Task not Found!!!")
     
     if task.assigner_id!=c_user.id and task.assignee_id!=c_user.id and not c_user.is_admin:
         raise HTTPException(status_code=403,detail="Not Authorized to update this Task...")
@@ -94,7 +108,7 @@ def delete_task(task_id: int, db: Session= Depends(get_db), c_user: Session=Depe
         raise HTTPException(status_code=403, detail="Admins are only allowed to delete tasks...")
     task=db.query(Task).filter(Task.id==task_id).first()
     if not task:
-        raise HTTPException(status_code=404,details="Task not Found!!!")
+        raise HTTPException(status_code=404,detail="Task not Found!!!")
     
 
     dep_tasks=(db.query(Task).filter(Task.dependency_id==task.id).all())

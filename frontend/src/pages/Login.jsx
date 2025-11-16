@@ -31,9 +31,14 @@ const Login=()=>{
 
         // Save token
         localStorage.setItem("token", data.access_token);
+        const payload=JSON.parse(atob(data.access_token.split(".")[1]));
+        if (payload.is_admin){
+            navigate("/admin");
+        } else{
+            navigate("/dashboard");
+        }
 
         alert("Login Successful!");
-        window.location.href = "/dashboard"; // redirect
     } catch (error) {
         alert("Something went wrong.");
         console.error(error);
@@ -75,6 +80,9 @@ const Login=()=>{
                 <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
                     Login
                 </button>
+                <p className="text-center text-sm text-gray-600 mt-3">
+                    Don't have an account? <a href="/signup" className="text-blue-600 hover:underline ml-1">Sign up</a>
+                </p>
             </form>
             </div>
         </div>

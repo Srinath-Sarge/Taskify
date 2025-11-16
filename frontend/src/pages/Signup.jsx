@@ -16,10 +16,13 @@ const Signup=()=>{
         try {
       const res = await fetch(
         `http://127.0.0.1:8000/auth/signup?username=${username}&password=${password}&is_admin=${isAdmin}`,
-        { method: "POST" }
-      );
+        { method: "POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({username,password,is_admin:isAdmin}),
+        });
 
-      if (!res.ok) {
+        const data=await res.json();
+        if (!res.ok) {
         setError("Username already exists or invalid input");
         return;
       }
@@ -75,6 +78,12 @@ return (
                 <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-green-700 transition">
                     Sign Up
                 </button>
+                <p className="text-center text-sm text-gray-600 mt-3">
+                Already have an account?
+                <a href="/login" className="text-blue-600 hover:underline ml-1">
+                    Log in
+                </a>
+                </p>
             </form>
         </div>
     </div>

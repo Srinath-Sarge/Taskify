@@ -1,22 +1,41 @@
 import React from "react";
 import logo from "../assets/1.png";
+import { handleLogout } from "../utils/logout";
+import { getUsername, getUserRole } from "../utils/auth";
 
-const Navbar=()=>{
-    return (
-        <nav className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center">
-            {/* Logo Section */}
-            <div className="flex items-center gap-3">
-                <img src={logo} alt="Taskify Logo" className="h-14 w-13 object-contain"/>
-                <h1 className="text-2xl font-bold text-blue-600">Taskify</h1>
-            </div>
+const Navbar = () => {
+  const username = getUsername();
+  const role = getUserRole() || "user";
 
-            {/* Right Menu */}
-            <div className="flex items-center gap-6">
-                <button className="text-gray-700 hover:text-blue-600 transition">Dashboard</button>
-                <button className="text-gray-700 hover:text-blue-600 transition">Tasks</button>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Logout</button>
-            </div>
-        </nav>
-    )
+  return (
+    <nav className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center">
+      
+      <div className="flex items-center gap-3">
+        <img src={logo} alt="Taskify Logo" className="h-14 w-13 object-contain" />
+        <h1 className="text-2xl font-bold text-blue-600">Taskify</h1>
+      </div>
+
+      <div className="flex items-center gap-4">
+        {username && (
+          <span className="text-gray-700 font-semibold">
+            Hello, {username}, role: {role}
+          </span>
+        )}
+      </div>
+
+      <div className="flex items-center gap-6">
+        <button className="text-gray-700 hover:text-blue-600 transition">Dashboard</button>
+        <button className="text-gray-700 hover:text-blue-600 transition">Tasks</button>
+        <button 
+          onClick={handleLogout} 
+          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+        >
+          Logout
+        </button>
+      </div>
+
+    </nav>
+  );
 };
+
 export default Navbar;

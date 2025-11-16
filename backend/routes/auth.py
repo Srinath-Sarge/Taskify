@@ -11,6 +11,11 @@ class LoginModel(BaseModel):
     username: str
     password: str
 
+class SignupModel(BaseModel):
+    username:str
+    password:str
+    is_admin: bool=False
+
 router= APIRouter(prefix="/auth",tags=["Authentication"])
 pwd_context=CryptContext(schemes=["bcrypt"],deprecated="auto")
 SECRET_KEY="1234"
@@ -22,11 +27,11 @@ def check():
     return {"message":"Your inside Authentication Route"}
 
 @router.post("/signup")
-def signup(username: str, password: str, db: Session=Depends(get_db)):
-    if db.query(User).filter(User.username==username).first():
+def signup(data: SignupModel, db: Session=Depends(get_db)):
+    if db.query(User).filter(User.username==data.username).first():
         raise HTTPException(status_code=400, detail="User already exists")
-    hashed_pass=pwd_context.hash(password)
-    db.add(User(username=username, password=hashed_pass))
+    hashed_pass=pwd_context.hash(data.password)
+    db.add(User(username=data.username, password=hashed_pass, is_admin=data.is_admin))
     db.commit()
     return {"message": "User created successfully"}
 
