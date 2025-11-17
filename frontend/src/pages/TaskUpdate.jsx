@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const TaskUpdate = () => {
-  const { id } = useParams(); // task ID from URL
-
+  const { id } = useParams();
   const [task, setTask] = useState(null);
   const [status, setStatus] = useState("");
   const [priority, setPriority] = useState("");
@@ -13,7 +12,6 @@ const TaskUpdate = () => {
 
   const token = localStorage.getItem("token");
 
-  // Fetch task details (YOUR backend has no get-by-id, so get all and filter)
   const fetchTask = async () => {
     try {
       const res = await fetch("http://127.0.0.1:8000/tasks/", {
@@ -94,15 +92,35 @@ const TaskUpdate = () => {
         <div>
           <label className="font-medium">Status</label>
           <select
-            className="w-full p-2 border rounded"
+            className="border px-3 py-2 rounded w-full"
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
-            <option value="pending">Pending</option>
-            <option value="in_progress">In Progress</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
+            {status === "pending" && (
+              <>
+                <option value="pending">Pending (current)</option>
+                <option value="in_progress">In Progress</option>
+                <option value="cancelled">Cancel</option>
+              </>
+            )}
+
+            {status === "in_progress" && (
+              <>
+                <option value="in_progress">In Progress (current)</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancel</option>
+              </>
+            )}
+
+            {status === "completed" && (
+              <option value="completed">Completed</option>
+            )}
+
+            {status === "cancelled" && (
+              <option value="cancelled">Cancel</option>
+            )}
           </select>
+
         </div>
 
         <div>

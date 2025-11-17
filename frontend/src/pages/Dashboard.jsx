@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Taskcard from "../components/Taskcard";
+import DescView from "../components/TaskDescription";
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
@@ -7,6 +8,7 @@ const Dashboard = () => {
   const [priorityFilter, setPriorityFilter] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [viewTask, setViewTask] = useState(null);
 
  const fetchTasks = async () => {
   setLoading(true);
@@ -151,10 +153,13 @@ const Dashboard = () => {
               title={task.title}
               status={task.status}
               priority={task.priority}
+              onView={()=>setViewTask(task)}
             />
+
           ))
         )}
       </div>
+      <DescView task={viewTask} onClose={() => setViewTask(null)} />
     </div>
   );
 };
