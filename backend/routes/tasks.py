@@ -74,33 +74,48 @@ def get_tasks(
 
 @router.put("/{task_id}")
 def update_task(task_id: int,
-                status: StatusEnum= None,
-                priority: PriorityEnum= None,
-                db: Session= Depends(get_db),
-                c_user: Session=Depends(get_current_user)):
-    task=db.query(Task).filter(Task.id==task_id).first()
+                status: StatusEnum = None,
+                priority: PriorityEnum = None,
+                db: Session = Depends(get_db),
+                c_user: Session = Depends(get_current_user)):
+
+    task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
-        raise HTTPException(status_code=404,detail="Task not Found!!!")
-    
-    if task.assigner_id!=c_user.id and task.assignee_id!=c_user.id and not c_user.is_admin:
-        raise HTTPException(status_code=403,detail="Not Authorized to update this Task...")
+        raise HTTPException(status_code=404, detail="Task not Found!!!")
+
+    if task.assigner_id != c_user.id and task.assignee_id != c_user.id and not c_user.is_admin:
+        raise HTTPException(status_code=403, detail="Not Authorized to update this Task...")
+
+    dep_task = None
     if task.dependency_id:
-            dep_task=db.query(Task).filter(Task.id==task.dependency_id).first()
-            if dep_task and dep_task.status==StatusEnum.cancelled:
-                task.status=StatusEnum.cancelled
-                db.commit()
-                db.refresh(task)
-                raise HTTPException(status_code=400, detail=f"Its dependency task is cancelled... so cancelling this task.")
+        dep_task = db.query(Task).filter(Task.id == task.dependency_id).first()
 
     if status:
-        if dep_task and dep_task.status!=StatusEnum.completed:
-                raise HTTPException(status_code=400, detail=f"Cannot modify this task before completing its dependency task... Task id:{dep_task.id},Task Name:{dep_task.title}")
-        task.status=status
+        if dep_task:
+            if dep_task.status == StatusEnum.cancelled:
+                task.status = StatusEnum.cancelled
+                db.commit()
+                db.refresh(task)
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Its dependency task is cancelled... so cancelling this task."
+                )
+
+            if dep_task.status != StatusEnum.completed:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Cannot update this task until dependency task {dep_task.id} is completed."
+                )
+
+        task.status = status
+
     if priority:
-        task.priority=priority
+        task.priority = priority
+
     db.commit()
     db.refresh(task)
-    return {"message":"Task updated Successfully","task":task.id}
+    return {"message": "Task updated Successfully", "task": task.id}
+
 
 @router.delete("/{task_id}")
 def delete_task(task_id: int, db: Session= Depends(get_db), c_user: Session=Depends(get_current_user)):

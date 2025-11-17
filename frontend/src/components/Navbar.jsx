@@ -18,14 +18,17 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         {username && (
           <span className="text-gray-700 font-semibold">
-            Hello, {username}, role: {role}
+            Hello {username}!!!
           </span>
         )}
       </div>
 
       <div className="flex items-center gap-6">
-        <button className="text-gray-700 hover:text-blue-600 transition">Dashboard</button>
-        <button className="text-gray-700 hover:text-blue-600 transition">Tasks</button>
+        <button href ="/dashboard" className="text-gray-700 hover:text-blue-600 transition">Dashboard</button>
+        {/* <button className="text-gray-700 hover:text-blue-600 transition">Tasks</button> */}
+        <a href="/create-task" className="px-5 py-3 hover:bg-gray-100">
+          Create Task
+        </a>
         <button 
           onClick={handleLogout} 
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"

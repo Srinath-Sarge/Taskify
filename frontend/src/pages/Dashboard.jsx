@@ -147,6 +147,7 @@ const Dashboard = () => {
           tasks.map((task) => (
             <Taskcard
               key={task.id}
+              id={task.id}
               title={task.title}
               status={task.status}
               priority={task.priority}

@@ -19,6 +19,10 @@ export default function Sidebar() {
         >
           Dashboard
         </a>
+        
+        <a href="/create-task" className="px-5 py-3 hover:bg-gray-100">
+          Create Task
+        </a>
 
         <a
           href="#"
