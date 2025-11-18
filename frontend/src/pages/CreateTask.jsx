@@ -118,13 +118,6 @@ const TaskCreate = () => {
           <option value="low">Low</option>
         </select>
 
-        {/* Assignee */}
-        <input
-          className="w-full border p-2 rounded"
-          placeholder="Assignee ID (leave empty for self)"
-          value={assignee}
-          onChange={(e) => setAssignee(e.target.value)}
-        />
 
         {/* Dependency Dropdown */}
         <select

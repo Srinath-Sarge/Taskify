@@ -38,7 +38,6 @@ const Dashboard = () => {
       },
     });
 
-    // Log status for quick debugging
     console.log("Tasks response status:", res.status);
 
     const raw = await res.text();
@@ -153,6 +152,7 @@ const Dashboard = () => {
               title={task.title}
               status={task.status}
               priority={task.priority}
+              is_overdue={task.is_overdue}
               onView={()=>setViewTask(task)}
             />
 

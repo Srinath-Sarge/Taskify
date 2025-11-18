@@ -108,6 +108,11 @@ def update_task(task_id: int,
                 )
 
         task.status = status
+        if status in (StatusEnum.completed, StatusEnum.cancelled):
+            task.is_overdue = False
+        else:
+            today = date.today()
+            task.is_overdue = task.due_date < today
 
     if priority:
         task.priority = priority

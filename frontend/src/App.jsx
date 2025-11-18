@@ -6,6 +6,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Signup from "./pages/Signup";
 import CreateTask from "./pages/CreateTask";
 import TaskUpdate from "./pages/TaskUpdate";
+import AdminTaskDashboard from "./pages/AdminTaskDashboard";
+import AdminManageUsers from "./pages/AdminManageUsers";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
@@ -23,19 +25,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* USER DASHBOARD */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <UserLayout>
-                <Dashboard />
-              </UserLayout>
-            </ProtectedRoute>
-          }
-        />
-
-        {/* ADMIN DASHBOARD */}
+        
+        {/* admin route */}
         <Route
           path="/admin"
           element={
@@ -48,6 +39,32 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminManageUsers />
+                </AdminLayout>
+              </AdminRoute>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/tasks"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminTaskDashboard />
+                </AdminLayout>
+              </AdminRoute>
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/admin/tasks/create"
           element={
@@ -73,7 +90,19 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        
+        
+        {/* users route */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <UserLayout>
+                <Dashboard />
+              </UserLayout>
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/create-task"
           element={

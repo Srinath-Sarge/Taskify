@@ -92,34 +92,37 @@ const TaskUpdate = () => {
         <div>
           <label className="font-medium">Status</label>
           <select
-            className="border px-3 py-2 rounded w-full"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            {status === "pending" && (
-              <>
-                <option value="pending">Pending (current)</option>
-                <option value="in_progress">In Progress</option>
-                <option value="cancelled">Cancel</option>
-              </>
-            )}
-
-            {status === "in_progress" && (
-              <>
-                <option value="in_progress">In Progress (current)</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancel</option>
-              </>
-            )}
-
-            {status === "completed" && (
-              <option value="completed">Completed</option>
-            )}
-
-            {status === "cancelled" && (
-              <option value="cancelled">Cancel</option>
-            )}
-          </select>
+  className="border px-3 py-2 rounded w-full"
+  value={status}
+  onChange={(e) => setStatus(e.target.value)}
+>
+  {task.is_overdue ? (
+    <>
+      <option value="in_progress">In Progress</option>
+      <option value="completed">Completed</option>
+      <option value="cancelled">Cancelled</option>
+    </>
+  ) : (
+    <>
+      {status === "pending" && (
+        <>
+          <option value="pending">Pending (current)</option>
+          <option value="in_progress">In Progress</option>
+          <option value="cancelled">Cancel</option>
+        </>
+      )}
+      {status === "in_progress" && (
+        <>
+          <option value="in_progress">In Progress (current)</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancel</option>
+        </>
+      )}
+      {status === "completed" && <option value="completed">Completed</option>}
+      {status === "cancelled" && <option value="cancelled">Cancelled</option>}
+    </>
+  )}
+</select>
 
         </div>
 

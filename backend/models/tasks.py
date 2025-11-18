@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, Enum, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, Enum, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from database import Base
 import enum
@@ -8,7 +8,6 @@ class StatusEnum(enum.Enum):
     in_progress = "in_progress"
     completed = "completed"
     cancelled = "cancelled"
-    overdue= "overdue"
 
 class PriorityEnum(enum.Enum):
     low="low"
@@ -24,6 +23,8 @@ class Task(Base):
     status= Column(Enum(StatusEnum), default=StatusEnum.pending) 
     priority= Column(Enum(PriorityEnum), default=PriorityEnum.medium)
     due_date= Column(Date, nullable=False)
+    is_overdue=Column(Boolean, default=False)
+    
     assigner_id= Column(Integer, ForeignKey("users.id"), nullable=True)
     assignee_id= Column(Integer, ForeignKey("users.id"), nullable=True)
     dependency_id = Column(Integer, ForeignKey("tasks.id"), nullable=True)

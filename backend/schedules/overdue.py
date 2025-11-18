@@ -11,9 +11,9 @@ def check_overdue_tasks():
         tasks=(db.query(Task).filter(Task.due_date<today,
                                      Task.status!=StatusEnum.completed,
                                      Task.status!=StatusEnum.cancelled,
-                                     Task.status!=StatusEnum.overdue).all())
+                                     Task.is_overdue==False).all())
         for task in tasks:
-            task.status=StatusEnum.overdue
+            task.is_overdue=True
         db.commit()
         print(f"Updated {len(tasks)} tasks to overdue status...")
     except Exception as e:

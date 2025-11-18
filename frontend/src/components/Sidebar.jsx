@@ -14,35 +14,28 @@ export default function Sidebar() {
       {/* Menu */}
       <nav className="mt-4 flex flex-col">
         <a
-          href="#"
+          href="/admin"
           className="px-5 py-3 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
         >
           Dashboard
         </a>
         
-        <a href="/create-task" className="px-5 py-3 hover:bg-gray-100">
-          Create Task
-        </a>
-
         <a
-          href="#"
+          href="/admin/tasks"
           className="px-5 py-3 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
         >
           My Tasks
         </a>
-
-        <a
-          href="#"
-          className="px-5 py-3 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
-        >
+        <a href="/admin/tasks/create" className="px-5 py-3 hover:bg-gray-100">
           Create Task
         </a>
 
+
         <a
-          href="#"
+          href="admin/users"
           className="px-5 py-3 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
         >
-          Modify Task
+          Manage Users
         </a>
       </nav>
 
