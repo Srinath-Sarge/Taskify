@@ -1,8 +1,11 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import os
 
-db_url="mysql+pymysql://root:1234@localhost/taskify_db"
+db_url=os.getenv("DATABASE_URL")
+if not db_url:
+    raise Exception("DATABASE_URL env is missing")
 
 engine = create_engine(db_url)
 SessionLocal= sessionmaker(bind=engine,autoflush=False)

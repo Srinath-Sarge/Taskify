@@ -4,6 +4,8 @@ from models import user
 from routes import auth,tasks,users
 from schedules.overdue import start_scheduler
 from fastapi.middleware.cors import CORSMiddleware
+import os 
+import uvicorn
 
 
 
@@ -19,7 +21,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-start_scheduler()
 
 @app.get("/")
 def home():
@@ -30,9 +31,8 @@ def greet(name: str):
     return {"Name":name}
 
 
-import os 
-import uvicorn
 
 if __name__=="__main__":
+    start_scheduler()
     port =int(os.environ.get("PORT",8000))
     uvicorn.run("main:app", host="0.0.0.0",port=port)
