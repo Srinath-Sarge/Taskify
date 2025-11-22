@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 import os
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
-SECRET_KEY=os.getenv("JWT_SECRET")
+SECRET_KEY=os.getenv("SECRET_KEY")
 ALGORITHM=os.getenv("JWT_ALGORITHM","HS256")
 
 def get_current_user(token: str=Depends(oauth2_scheme),db:Session=Depends(get_db)):

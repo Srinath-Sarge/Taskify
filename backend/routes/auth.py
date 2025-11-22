@@ -19,7 +19,7 @@ class SignupModel(BaseModel):
 
 router= APIRouter(prefix="/auth",tags=["Authentication"])
 pwd_context=CryptContext(schemes=["bcrypt"],deprecated="auto")
-SECRET_KEY=os.getenv("JWT_SECRET")
+SECRET_KEY=os.getenv("SECRET_KEY")
 ALGORITHM=os.getenv("JWT_ALGORITHM","HS256")
 exp_time=30
 

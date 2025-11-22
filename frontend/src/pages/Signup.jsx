@@ -17,7 +17,9 @@ const Signup=()=>{
       const res = await fetch(
         `https://taskify-production-ea73.up.railway.app/auth/signup?username=${username}&password=${password}&is_admin=${isAdmin}`,
         { method: "POST",
-        headers:{"Content-Type":"application/json"},
+        headers:{"Content-Type":"application/json",
+            "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({username,password,is_admin:isAdmin}),
         });
 
