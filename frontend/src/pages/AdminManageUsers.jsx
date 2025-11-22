@@ -5,7 +5,7 @@ const AdminManageUsers = () => {
   const token = localStorage.getItem("token");
 
   const fetchUsers = async () => {
-    const res = await fetch("http://127.0.0.1:8000/users/all", {
+    const res = await fetch("https://taskify-production-ea73.up.railway.app/users/all", {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -15,7 +15,7 @@ const AdminManageUsers = () => {
 
   const toggleAdmin = async (id, makeAdmin) => {
     const res = await fetch(
-      `http://127.0.0.1:8000/users/set_admin/${id}?admin=${makeAdmin}`,
+      `https://taskify-production-ea73.up.railway.app/users/set_admin/${id}?admin=${makeAdmin}`,
       {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` }
@@ -28,7 +28,7 @@ const AdminManageUsers = () => {
   const deleteUser = async (id) => {
     if (!window.confirm("Delete this user?")) return;
 
-    const res = await fetch(`http://127.0.0.1:8000/users/${id}`, {
+    const res = await fetch(`https://taskify-production-ea73.up.railway.app/users/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` }
     });

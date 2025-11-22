@@ -22,7 +22,7 @@ const Dashboard = () => {
   }
 
   try {
-    let url = "http://127.0.0.1:8000/tasks/";
+    let url = "https://taskify-production-ea73.up.railway.app/tasks/";
     const params = new URLSearchParams();
     if (statusFilter) params.append("status", statusFilter);
     if (priorityFilter) params.append("priority", priorityFilter);

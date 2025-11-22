@@ -6,7 +6,7 @@ const AdminDashboard = () => {
   const token = localStorage.getItem("token");
 
   const fetchUsers = async () => {
-    const res = await fetch("http://127.0.0.1:8000/users/all", {
+    const res = await fetch("https://taskify-production-ea73.up.railway.app/users/all", {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -15,7 +15,7 @@ const AdminDashboard = () => {
   };
 
   const fetchTasks = async () => {
-    const res = await fetch("http://127.0.0.1:8000/tasks/", {
+    const res = await fetch("https://taskify-production-ea73.up.railway.app/tasks/", {
       headers: { Authorization: `Bearer ${token}` }
     });
 

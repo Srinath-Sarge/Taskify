@@ -6,7 +6,7 @@ const AdminTaskList = () => {
   const token = localStorage.getItem("token");
 
   const fetchTasks = async () => {
-    const res = await fetch("http://127.0.0.1:8000/tasks/", {
+    const res = await fetch("https://taskify-production-ea73.up.railway.app/tasks/", {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -15,7 +15,7 @@ const AdminTaskList = () => {
 
   const deleteTask = async (id) => {
     if (!window.confirm("Delete this task?")) return;
-    const res = await fetch(`http://127.0.0.1:8000/tasks/${id}`, {
+    const res = await fetch(`https://taskify-production-ea73.up.railway.app/tasks/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });

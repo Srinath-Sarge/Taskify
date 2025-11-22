@@ -17,7 +17,7 @@ const TaskCreate = () => {
   // Load tasks for dependency dropdown
   const fetchTasks = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/tasks/", {
+      const res = await fetch("https://taskify-production-ea73.up.railway.app/tasks/", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -46,7 +46,7 @@ const TaskCreate = () => {
     if (assignee) params.append("assignee_id", assignee);
     if (dependency) params.append("dependency_id", dependency);
 
-    const url = `http://127.0.0.1:8000/tasks/?${params.toString()}`;
+    const url = `https://taskify-production-ea73.up.railway.app/tasks/?${params.toString()}`;
 
     try {
       const res = await fetch(url, {

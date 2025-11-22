@@ -6,6 +6,7 @@ from passlib.context import CryptContext
 from jose import jwt
 from datetime import datetime, timedelta
 from pydantic import BaseModel
+import os
 
 class LoginModel(BaseModel):
     username: str
@@ -18,8 +19,8 @@ class SignupModel(BaseModel):
 
 router= APIRouter(prefix="/auth",tags=["Authentication"])
 pwd_context=CryptContext(schemes=["bcrypt"],deprecated="auto")
-SECRET_KEY="1234"
-ALGORITHM="HS256"
+SECRET_KEY=os.getenv("JWT_SECRET")
+ALGORITHM=os.getenv("JWT_ALGORITHM","HS256")
 exp_time=30
 
 @router.get("/")
