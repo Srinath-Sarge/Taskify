@@ -34,9 +34,11 @@ const AdminTaskDashboard = () => {
       <h1 className="text-3xl font-bold mb-6">Manage Tasks</h1>
 
       <div className="grid grid-cols-3 gap-6">
-        {tasks.map((task) => (
+        {tasks.length===0 ? (
+          <p>No Tasks Found!!!</p>
+        ):(tasks.map((task) => (
           <AdminTaskcard key={task.id} task={task} onDelete={deleteTask} />
-        ))}
+        )))}
       </div>
     </div>
   );

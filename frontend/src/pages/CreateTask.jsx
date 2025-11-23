@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {getUserRole} from "../utils/auth";
 
 const TaskCreate = () => {
   const [title, setTitle] = useState("");
@@ -13,6 +14,7 @@ const TaskCreate = () => {
   const [error, setError] = useState("");
 
   const token = localStorage.getItem("token");
+  const role =getUserRole();
 
   // Load tasks for dependency dropdown
   const fetchTasks = async () => {
@@ -119,12 +121,12 @@ const TaskCreate = () => {
         </select>
 
         {/* Assignee */}
-        <input
+        {role==="admin" && (<input
           className="w-full border p-2 rounded"
           placeholder="Assignee ID (leave empty for self)"
           value={assignee}
           onChange={(e) => setAssignee(e.target.value)}
-        />
+        />)}
 
         {/* Dependency Dropdown */}
         <select

@@ -32,7 +32,7 @@ export default function Sidebar() {
 
 
         <a
-          href="admin/users"
+          href="/admin/users"
           className="px-5 py-3 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
         >
           Manage Users

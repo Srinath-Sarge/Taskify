@@ -49,7 +49,7 @@ const TaskUpdate = () => {
     if (status) params.append("status", status);
     if (priority) params.append("priority", priority);
 
-    const url = `http://127.0.0.1:8000/tasks/${id}?${params.toString()}`;
+    const url = `https://taskify-production-ea73.up.railway.app/tasks/${id}?${params.toString()}`;
 
     try {
       const res = await fetch(url, {

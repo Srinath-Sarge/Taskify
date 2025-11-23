@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Signup=()=>{
     const [username, setUsername]=useState("");
     const [password, setPassword]=useState("");
-    const [isAdmin, setIsAdmin]=useState("");
+    const [isAdmin, setIsAdmin]=useState(false);
     const [error, setError]=useState("");
 
     const navigate=useNavigate();
@@ -17,9 +17,7 @@ const Signup=()=>{
       const res = await fetch(
         `https://taskify-production-ea73.up.railway.app/auth/signup?username=${username}&password=${password}&is_admin=${isAdmin}`,
         { method: "POST",
-        headers:{"Content-Type":"application/json",
-            "Authorization": `Bearer ${token}`
-        },
+        headers:{"Content-Type":"application/json",},
         body: JSON.stringify({username,password,is_admin:isAdmin}),
         });
 
