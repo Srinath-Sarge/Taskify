@@ -69,8 +69,17 @@ def get_tasks(
             query = query.filter(Task.priority == priority_enum)
         except:
             pass
+    tasks=query.all()
+    today=date.today()
 
-    return query.all()
+    for t in tasks:
+        if t.due_date<today and t.status not in (StatusEnum.completed, StatusEnum.cancelled):
+            t.is_overdue=True
+        else:
+            t.is_overdue=False
+    db.commit()        
+
+    return tasks
 
 @router.put("/{task_id}")
 def update_task(task_id: int,
