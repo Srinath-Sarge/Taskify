@@ -79,7 +79,21 @@ def get_tasks(
             t.is_overdue=False
     db.commit()        
 
-    return tasks
+    return [
+        {
+            "id": t.id,
+            "title": t.title,
+            "description": t.description,
+            "status": t.status.value,
+            "priority": t.priority.value,
+            "due_date": t.due_date,
+            "assigner_id": t.assigner_id,
+            "assignee_id": t.assignee_id,
+            "dependency_id": t.dependency_id,
+            "is_overdue": t.is_overdue,
+        }
+        for t in tasks
+    ]
 
 @router.put("/{task_id}")
 def update_task(task_id: int,
