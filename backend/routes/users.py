@@ -69,3 +69,54 @@ def delete_user(
     db.commit()
 
     return {"message": "User deleted successfully", "deleted_user_id": user_id}
+
+@router.get("/admin/requests")
+def get_admin_requests(db: Session = Depends(get_db), c_user: User = Depends(get_current_user)):
+    if not c_user.is_admin:
+        raise HTTPException(status_code=403, detail="Only admins can view admin requests.")
+
+    requests = db.query(User).filter(User.admin_request == "pending").all()
+
+    return [
+        {"id": u.id, "username": u.username, "requested_admin": True}
+        for u in requests
+    ]
+
+@router.put("/admin/requests/{user_id}")
+def handle_admin_request(
+    user_id: int,
+    action: str,   # "approve" or "reject"
+    db: Session = Depends(get_db),
+    c_user: User = Depends(get_current_user)
+):
+
+    if not c_user.is_admin:
+        raise HTTPException(status_code=403, detail="Only admins can modify admin requests.")
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    if action not in ["approve", "reject"]:
+        raise HTTPException(status_code=400, detail="Action must be 'approve' or 'reject'.")
+
+    if action == "approve":
+        user.is_admin = True
+        user.admin_request = "approved"
+        message = "Admin access granted"
+
+    elif action == "reject":
+        user.is_admin = False
+        user.admin_request = "rejected"
+        message = "Admin request rejected"
+
+    db.commit()
+
+    return {
+        "message": message,
+        "user_id": user.id,
+        "new_admin_status": user.is_admin,
+        "request_status": user.admin_request
+    }
+

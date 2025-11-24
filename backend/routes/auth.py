@@ -15,7 +15,7 @@ class LoginModel(BaseModel):
 class SignupModel(BaseModel):
     username:str
     password:str
-    is_admin: bool=False
+    is_admin:bool|None=None
 
 router= APIRouter(prefix="/auth",tags=["Authentication"])
 pwd_context=CryptContext(schemes=["bcrypt"],deprecated="auto")
@@ -32,9 +32,15 @@ def signup(data: SignupModel, db: Session=Depends(get_db)):
     if db.query(User).filter(User.username==data.username).first():
         raise HTTPException(status_code=400, detail="User already exists")
     hashed_pass=pwd_context.hash(data.password)
-    db.add(User(username=data.username, password=hashed_pass, is_admin=data.is_admin))
+    admin_status="pending" if data.is_admin else "none"
+    new_user=User(username=data.username, 
+                  password=hashed_pass, 
+                  is_admin=False,
+                  admin_request=admin_status)
+    db.add(new_user)
     db.commit()
-    return {"message": "User created successfully"}
+    db.refresh(new_user)
+    return {"message": "User created successfully","Admin_request":admin_status}
 
 @router.post("/login")
 def login(data: LoginModel, db: Session=Depends(get_db)):
