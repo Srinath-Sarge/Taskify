@@ -127,7 +127,7 @@ def update_task(task_id: int,
             if dep_task.status != StatusEnum.completed:
                 raise HTTPException(
                     status_code=400,
-                    detail=f"Cannot update this task until dependency task {dep_task.id} is completed."
+                    detail=f"Cannot update this task until dependency task {dep_task.id} {dep_task.title} is completed."
                 )
 
         task.status = status
