@@ -76,7 +76,7 @@ return (
                     />
                 </div>
                 {/* submit */}
-                <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-green-700 transition">
+                <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
                     Sign Up
                 </button>
                 <p className="text-center text-sm text-gray-600 mt-3">
