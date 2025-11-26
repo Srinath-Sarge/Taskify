@@ -24,9 +24,10 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-6">
-        <a href ="/dashboard" className="text-gray-700 hover:text-blue-600 transition">Dashboard</a>
-        {/* <button className="text-gray-700 hover:text-blue-600 transition">Tasks</button> */}
-        <a href="/create-task" className="px-5 py-3 hover:bg-gray-100">
+        <a href ="/dashboard" className="px-5 py-3 hover:bg-gray-100 hover:text-blue-600 transition">
+          Dashboard
+        </a>
+        <a href="/create-task" className="px-5 py-3 hover:bg-gray-100 hover:text-blue-600 transition">
           Create Task
         </a>
         <button 

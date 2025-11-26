@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Signup=()=>{
+    const API=import.meta.env.VITE_API_URL
     const [username, setUsername]=useState("");
     const [password, setPassword]=useState("");
     const [isAdmin, setIsAdmin]=useState(false);
@@ -15,7 +16,7 @@ const Signup=()=>{
 
         try {
       const res = await fetch(
-        `https://taskify-production-ea73.up.railway.app/auth/signup?username=${username}&password=${password}&is_admin=${isAdmin}`,
+        `${API}/auth/signup?username=${username}&password=${password}&is_admin=${isAdmin}`,
         { method: "POST",
         headers:{"Content-Type":"application/json",},
         body: JSON.stringify({username,password,is_admin:isAdmin}),

@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 
-const AdminTaskcard = ({ task, onDelete }) => {
+const AdminTaskcard = ({ task, onDelete, onView}) => {
   return (
-    <div className="relative p-5 bg-white shadow rounded-lg hover:shadow-lg transition">
+    <div onClick={()=>onView(task)} className="relative p-5 bg-white shadow rounded-lg hover:shadow-lg border border-blue-600 transition">
 
       {task.is_overdue && (
         <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
@@ -17,14 +17,17 @@ const AdminTaskcard = ({ task, onDelete }) => {
       <div className="flex gap-4 mt-4">
         <Link
           to={`/admin/tasks/update/${task.id}`}
-          className="text-blue-600 font-medium"
+          className="text-blue-600 font-medium hover:text-green-500"
+          onClick={(e)=> e.stopPropagation()}
         >
           Edit
         </Link>
 
         <button
-          className="text-red-600 font-medium"
-          onClick={() => onDelete(task.id)}
+          className="text-red-600 font-medium hover:text-red-800"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(task.id)}}
         >
           Delete
         </button>

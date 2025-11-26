@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {getUserRole} from "../utils/auth";
 
 const TaskCreate = () => {
+  const API=import.meta.env.VITE_API_URL
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -19,7 +20,7 @@ const TaskCreate = () => {
   // Load tasks for dependency dropdown
   const fetchTasks = async () => {
     try {
-      const res = await fetch("https://taskify-production-ea73.up.railway.app/tasks/", {
+      const res = await fetch(`${API}/tasks/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -48,7 +49,7 @@ const TaskCreate = () => {
     if (assignee) params.append("assignee_id", assignee);
     if (dependency) params.append("dependency_id", dependency);
 
-    const url = `https://taskify-production-ea73.up.railway.app/tasks/?${params.toString()}`;
+    const url = `${API}/tasks/?${params.toString()}`;
 
     try {
       const res = await fetch(url, {
@@ -142,7 +143,7 @@ const TaskCreate = () => {
           ))}
         </select>
 
-        <button className="bg-blue-600 text-white px-4 py-2 rounded">
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
           Create Task
         </button>
       </form>

@@ -11,6 +11,12 @@ const DescView = ({ task, onClose }) => {
         <p><strong>Status:</strong> {task.status}</p>
         <p><strong>Priority:</strong> {task.priority}</p>
         <p><strong>Due:</strong> {task.due_date}</p>
+        {task.dependency_id && (
+          <p><strong>Dependency Task:</strong> {task.dependency_title}</p>
+        )}
+        {task.dependency_id && (
+          <p><strong>Dependency Status:</strong> {task.dependency_status}</p>
+        )}
 
         <button
           onClick={onClose}

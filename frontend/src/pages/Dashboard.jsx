@@ -3,6 +3,7 @@ import Taskcard from "../components/Taskcard";
 import DescView from "../components/TaskDescription";
 
 const Dashboard = () => {
+  const API=import.meta.env.VITE_API_URL
   const [tasks, setTasks] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
@@ -22,7 +23,7 @@ const Dashboard = () => {
   }
 
   try {
-    let url = "https://taskify-production-ea73.up.railway.app/tasks/";
+    let url = `${API}/tasks/`;
     const params = new URLSearchParams();
     if (statusFilter) params.append("status", statusFilter);
     if (priorityFilter) params.append("priority", priorityFilter);
@@ -107,7 +108,7 @@ const Dashboard = () => {
       {/* FILTERS */}
       <div className="flex gap-4 mb-6">
         <select
-          className="border px-3 py-2 rounded"
+          className="border px-3 py-2 rounded hover:bg-gray-400"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
         >
@@ -119,7 +120,7 @@ const Dashboard = () => {
         </select>
 
         <select
-          className="border px-3 py-2 rounded"
+          className="border px-3 py-2 rounded hover:bg-gray-400"
           value={priorityFilter}
           onChange={(e) => setPriorityFilter(e.target.value)}
         >
@@ -131,7 +132,7 @@ const Dashboard = () => {
 
         <button
           onClick={fetchTasks}
-          className="ml-2 bg-blue-600 text-white px-4 rounded"
+          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
         >
           Refresh
         </button>

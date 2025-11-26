@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 
 const AdminDashboard = () => {
+  const API=import.meta.env.VITE_API_URL
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState(0);
   const token = localStorage.getItem("token");
 
   const fetchUsers = async () => {
-    const res = await fetch("https://taskify-production-ea73.up.railway.app/users/all", {
+    const res = await fetch(`${API}/users/all`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -15,7 +16,7 @@ const AdminDashboard = () => {
   };
 
   const fetchTasks = async () => {
-    const res = await fetch("https://taskify-production-ea73.up.railway.app/tasks/", {
+    const res = await fetch(`${API}/tasks/`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -40,22 +41,22 @@ const AdminDashboard = () => {
 
       <div className="grid grid-cols-3 gap-6 mb-10">
 
-        <div className="p-5 bg-white shadow rounded-lg">
+        <div className="p-5 bg-white shadow border rounded-lg border-2 border-black-600">
           <h3 className="text-lg font-bold">Total Users</h3>
           <p className="text-xl mt-2">{users}</p>
         </div>
 
-        <div className="p-5 bg-white shadow rounded-lg">
+        <div className="p-5 bg-white shadow border rounded-lg border-2 border-blue-600">
           <h3 className="text-lg font-bold">Total Tasks</h3>
           <p className="text-xl mt-2">{totalTasks}</p>
         </div>
 
-        <div className="p-5 bg-white shadow rounded-lg">
+        <div className="p-5 bg-white shadow border rounded-lg border-2 border-yellow-600">
           <h3 className="text-lg font-bold">Pending Tasks</h3>
           <p className="text-xl mt-2">{pending}</p>
         </div>
 
-        <div className="p-5 bg-white shadow rounded-lg">
+        <div className="p-5 bg-white shadow border rounded-lg border-2 border-red-600">
           <h3 className="text-lg font-bold">Overdue Tasks</h3>
           <p className="text-xl mt-2 text-red-600">{overdue}</p>
         </div>

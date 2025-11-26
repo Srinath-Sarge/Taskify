@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const TaskUpdate = () => {
+  const API=import.meta.env.VITE_API_URL
   const { id } = useParams();
   const [task, setTask] = useState(null);
   const [status, setStatus] = useState("");
@@ -14,7 +15,7 @@ const TaskUpdate = () => {
 
   const fetchTask = async () => {
     try {
-      const res = await fetch("https://taskify-production-ea73.up.railway.app/tasks/", {
+      const res = await fetch(`${API}/tasks/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -49,7 +50,7 @@ const TaskUpdate = () => {
     if (status) params.append("status", status);
     if (priority) params.append("priority", priority);
 
-    const url = `https://taskify-production-ea73.up.railway.app/tasks/${id}?${params.toString()}`;
+    const url = `${API}/tasks/${id}?${params.toString()}`;
 
     try {
       const res = await fetch(url, {

@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import AdminTaskcard from "./AdminTaskcard";
 
 const AdminTaskList = () => {
+  const API=import.meta.env.VITE_API_URL
   const [tasks, setTasks] = useState([]);
   const token = localStorage.getItem("token");
 
   const fetchTasks = async () => {
-    const res = await fetch("https://taskify-production-ea73.up.railway.app/tasks/", {
+    const res = await fetch(`${API}/tasks/`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -15,7 +16,7 @@ const AdminTaskList = () => {
 
   const deleteTask = async (id) => {
     if (!window.confirm("Delete this task?")) return;
-    const res = await fetch(`https://taskify-production-ea73.up.railway.app/tasks/${id}`, {
+    const res = await fetch(`${API}/tasks/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
