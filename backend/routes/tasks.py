@@ -90,6 +90,16 @@ def get_tasks(
             "assigner_id": t.assigner_id,
             "assignee_id": t.assignee_id,
             "dependency_id": t.dependency_id,
+            "dependency_title": (
+                db.query(Task).filter(Task.id == t.dependency_id).first().title
+                if t.dependency_id else None
+            ),
+
+            "dependency_status": (
+                db.query(Task).filter(Task.id == t.dependency_id).first().status.value
+                if t.dependency_id else None
+            ),
+
             "is_overdue": t.is_overdue,
         }
         for t in tasks
