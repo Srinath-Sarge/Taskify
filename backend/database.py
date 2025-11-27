@@ -7,8 +7,16 @@ db_url=os.getenv("DATABASE_URL")
 if not db_url:
     raise Exception("DATABASE_URL env is missing")
 
-engine = create_engine(db_url)
-SessionLocal= sessionmaker(bind=engine,autoflush=False)
+engine = create_engine(
+    db_url,
+    pool_pre_ping=True,
+    pool_recycle=280,
+    pool_size=5,
+    max_overflow=10)
+SessionLocal= sessionmaker(
+    bind=engine,
+    autoflush=False,
+    auto_commit=False)
 Base = declarative_base()
 
 def get_db():
