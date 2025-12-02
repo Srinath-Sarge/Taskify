@@ -119,26 +119,35 @@ def update_task(task_id: int,
     if task.assigner_id != c_user.id and task.assignee_id != c_user.id and not c_user.is_admin:
         raise HTTPException(status_code=403, detail="Not Authorized to update this Task...")
 
-    dep_task = None
-    if task.dependency_id:
-        dep_task = db.query(Task).filter(Task.id == task.dependency_id).first()
+    sub_tasks=db.query(Task).filter(Task.parent_id==id).first().all()
+    parent_task=None
+    if task.parent_id:
+        parent_task = db.query(Task).filter(Task.id == task.parent_id).first()
 
     if status:
-        if dep_task:
-            if dep_task.status == StatusEnum.cancelled:
+        if parent_task:
+            if parent_task.status == StatusEnum.cancelled:
                 task.status = StatusEnum.cancelled
                 db.commit()
                 db.refresh(task)
                 raise HTTPException(
                     status_code=400,
-                    detail=f"Its dependency task is cancelled... so cancelling this task."
+                    detail=f"Its parent task is cancelled... so cancelling this task."
                 )
 
-            if dep_task.status != StatusEnum.completed:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Cannot update this task until dependency task ID:{dep_task.id}, Title:{dep_task.title} is completed."
-                )
+        if sub_tasks:
+            if status==StatusEnum.completed:
+                incomplete=[st for st in sub_tasks if st.status!=StatusEnum.completed]
+                if incomplete:
+                    names=", ".join([f"{s.id}:{s.title}" for s in incomplete])
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"Cannot complete root task. Incomplete subtasks: {names}"
+                    )
+            if status==StatusEnum.cancelled:
+                for st in sub_tasks:
+                    st.status=StatusEnum.cancelled
+                db.commit()
 
         task.status = status
         if status in (StatusEnum.completed, StatusEnum.cancelled):

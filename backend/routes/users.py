@@ -85,7 +85,7 @@ def get_admin_requests(db: Session = Depends(get_db), c_user: User = Depends(get
 @router.put("/admin/requests/{user_id}")
 def handle_admin_request(
     user_id: int,
-    action: str,   # "approve" or "reject"
+    action: str,
     db: Session = Depends(get_db),
     c_user: User = Depends(get_current_user)
 ):
