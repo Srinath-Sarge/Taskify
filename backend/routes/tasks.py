@@ -89,18 +89,16 @@ def get_tasks(
             "due_date": t.due_date,
             "assigner_id": t.assigner_id,
             "assignee_id": t.assignee_id,
-            "dependency_id": t.dependency_id,
-            "dependency_title": (
-                db.query(Task).filter(Task.id == t.dependency_id).first().title
-                if t.dependency_id else None
-            ),
-
-            "dependency_status": (
-                db.query(Task).filter(Task.id == t.dependency_id).first().status.value
-                if t.dependency_id else None
-            ),
-
             "is_overdue": t.is_overdue,
+            "parent_id":t.parent_id,
+            "sub_tasks":[
+                {
+                    "id": st.id,
+                    "title": st.title,
+                    "status": st.status.value
+                }
+                for st in t.subtasks
+            ]
         }
         for t in tasks
     ]
